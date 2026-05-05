@@ -32,7 +32,7 @@ That’s it. Your profile now renders a live dashboard.
 ```
 
 Available themes:
-`dark` (default), `light`, `dracula`, `nord`, `tokyonight`, `monokai`, `gruvbox`, `solarized`, `catppuccin`, `rose-pine`
+`dark` (default), `light`, `dracula`, `nord`, `tokyonight`, `monokai`, `gruvbox`, `solarized`, `catppuccin`, `rose-pine`, `aurora`, `midnight-sunset`
 
 ---
 
