@@ -70,7 +70,7 @@ Options: `left` (default), `center`, `right`
 ### Full Example
 
 ```md
-![samdev-pulse](https://samdev-pulse.vercel.app/api/profile?username=torvalds&theme=tokyonight&align=center&leetcode=tourist&codeforces=tourist&codechef=tourist)
+![samdev-pulse](https://samdev-pulse.vercel.app/api/profile?username=SamXop123&theme=tokyonight&align=center&leetcode=fjzzq2002&codeforces=tourist&codechef=tourist)
 ```
 
 **Preview:**
