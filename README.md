@@ -36,17 +36,16 @@ Available themes:
 
 ---
 
-### LeetCode Stats (Optional)
+### Competitive Programming Stats (Optional)
 
 ```md
-![samdev-pulse](https://samdev-pulse.vercel.app/api/profile?username=YOUR_GITHUB_USERNAME&leetcode=YOUR_LEETCODE_USERNAME)
+![samdev-pulse](https://samdev-pulse.vercel.app/api/profile?username=YOUR_GITHUB_USERNAME&leetcode=YOUR_LEETCODE_USERNAME&codeforces=YOUR_CODEFORCES_USERNAME&codechef=YOUR_CODECHEF_USERNAME)
 ```
 
-Disable LeetCode and show repository stats instead:
-
-```md
-![samdev-pulse](https://samdev-pulse.vercel.app/api/profile?username=YOUR_GITHUB_USERNAME&leetcode=false)
-```
+Depending on how many platforms you provide:
+- **1 platform:** Replaces the default repository stats card.
+- **2+ platforms:** Renders a dedicated "Competitive Programming" section at the bottom for a clean layout.
+- **0 platforms:** Shows the default repository stats card.
 
 ---
 
@@ -71,8 +70,12 @@ Options: `left` (default), `center`, `right`
 ### Full Example
 
 ```md
-![samdev-pulse](https://samdev-pulse.vercel.app/api/profile?username=SamXop123&theme=tokyonight&leetcode=Dot_NotSam&align=center)
+![samdev-pulse](https://samdev-pulse.vercel.app/api/profile?username=torvalds&theme=tokyonight&align=center&leetcode=tourist&codeforces=tourist&codechef=tourist)
 ```
+
+**Preview:**
+
+![samdev-pulse full preview](https://samdev-pulse.vercel.app/api/profile?username=SamXop123&theme=dracula&align=center&leetcode=fjzzq2002&codeforces=tourist&codechef=tourist)
 
 ---
 
@@ -112,11 +115,12 @@ Options: `left` (default), `center`, `right`
 * Percentage-based slices
 * Calculated from public repositories
 
-### 💻 LeetCode Integration (Optional)
+### 💻 Competitive Programming (Optional)
 
-* Total problems solved
-* Easy / Medium / Hard breakdown
-* Contest rating with fallback to ranking
+* **LeetCode**: Total problems solved, difficulty breakdown, contest rating.
+* **Codeforces**: Current rating, max rating, rank.
+* **CodeChef**: Current rating, max rating, stars.
+* **Adaptive Layout**: Automatically organizes 1 or multiple platform stats cleanly.
 
 ---
 
@@ -152,9 +156,11 @@ A visual trophy system highlighting GitHub milestones:
 | ---------- | -------------- |-------------| ---------------------------- |
 | `username` | string         | `SamXop123` | GitHub username              |
 | `theme`    | string         | `dark`      | Visual theme                 |
-| `leetcode` | string / false | –           | LeetCode username or disable |
+| `leetcode` | string / false | –           | LeetCode username            |
+| `codeforces` | string / false | –           | Codeforces username          |
+| `codechef`   | string / false | –           | CodeChef username            |
 | `align`    | string         | `left`      | Header alignment             |
-| `hide_trophies` | boolean | `false`      | Hide the achievements trophies row |
+| `hide_trophies` | boolean   | `false`     | Hide the achievements trophies row |
 
 ---
 
@@ -242,7 +248,6 @@ Please see `CONTRIBUTING.md` for guidelines.
 Ideas:
 
 * More themes
-* Codeforces / CodeChef support
 * New trophy categories
 * Animated SVG elements
 * CI & tests
