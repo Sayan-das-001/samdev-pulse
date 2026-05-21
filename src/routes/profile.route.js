@@ -17,6 +17,8 @@ import { getLeetCodeData } from '../services/leetcode.service.js';
 import { getCodeforcesData } from '../services/codeforces.service.js';
 import { getCodeChefData } from '../services/codechef.service.js';
 import { renderCPSection } from '../renderers/cp-section.renderer.js';
+import { sendGracefulErrorSvg } from '../renderers/error.renderer.js';
+import { GitHubErrorCode } from '../services/github.service.js';
 import { logApiAccess } from '../utils/logger.js';
 
 const router = Router();
@@ -56,9 +58,11 @@ function getTopLanguages(repos, max = 5) {
 }
 
 router.get('/', async (req, res) => {
+  try {
   logApiAccess(req).catch(err => console.error('Log failed:', err.message));
 
   const { theme, leetcode, align, hide_trophies, codeforces, codechef } = req.query;
+  setTheme(theme || 'dark');
 
   const rawUsername = typeof req.query.username === 'string' ? req.query.username : '';
   const usernameRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$|^[a-zA-Z0-9]$/;
@@ -67,25 +71,13 @@ router.get('/', async (req, res) => {
   if (!rawUsername) {
     username = DEFAULT_USERNAME;
   } else if (!usernameRegex.test(rawUsername)) {
-    const errorSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="120">
-      <rect width="600" height="120" rx="10" fill="#0d1117" />
-      <text x="300" y="50" font-family="Arial" font-size="16" fill="#f87171" text-anchor="middle" font-weight="bold">
-        ⚠ Invalid GitHub Username
-      </text>
-      <text x="300" y="78" font-family="Arial" font-size="12" fill="#8b949e" text-anchor="middle">
-        Usernames must be 1–39 characters, alphanumeric or hyphens only,
-      </text>
-      <text x="300" y="98" font-family="Arial" font-size="12" fill="#8b949e" text-anchor="middle">
-        and cannot start or end with a hyphen.
-      </text>
-    </svg>`;
-    res.setHeader('Content-Type', 'image/svg+xml');
-    return res.status(400).send(errorSvg);
+    return sendGracefulErrorSvg(res, {
+      code: 'INVALID_USERNAME',
+      username: rawUsername,
+    });
   } else {
     username = rawUsername;
   }
-
-  setTheme(theme || 'dark');
 
   const leetcodeDisabled = leetcode === 'false';
   const shouldRenderLeetCode = Boolean(leetcode && !leetcodeDisabled);
@@ -97,7 +89,11 @@ router.get('/', async (req, res) => {
 
   const result = await getGitHubUserData(username);
   if (!result.success) {
-    return res.status(500).json({ error: result.error });
+    return sendGracefulErrorSvg(res, {
+      code: result.code || GitHubErrorCode.API_ERROR,
+      username,
+      detail: result.error,
+    });
   }
   const { data } = result;
 
@@ -288,6 +284,14 @@ router.get('/', async (req, res) => {
   res.setHeader('Content-Type', 'image/svg+xml');
   res.setHeader('Cache-Control', 'public, max-age=1800');
   res.send(svg);
+  } catch (error) {
+    console.error('Profile render failed:', error.message);
+    return sendGracefulErrorSvg(res, {
+      code: GitHubErrorCode.API_ERROR,
+      username: typeof req.query.username === 'string' ? req.query.username : undefined,
+      detail: error.message,
+    });
+  }
 });
 
 export default router;

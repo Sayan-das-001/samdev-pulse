@@ -4,6 +4,48 @@ import { githubCache } from '../utils/cache.js';
 
 const GITHUB_API_BASE = 'https://api.github.com';
 
+export const GitHubErrorCode = {
+  NOT_FOUND: 'NOT_FOUND',
+  RATE_LIMIT: 'RATE_LIMIT',
+  API_DOWN: 'API_DOWN',
+  API_ERROR: 'API_ERROR',
+  NETWORK: 'NETWORK',
+};
+
+class GitHubRequestError extends Error {
+  constructor(message, code, status = 0) {
+    super(message);
+    this.name = 'GitHubRequestError';
+    this.code = code;
+    this.status = status;
+  }
+}
+
+function errorFromStatus(status) {
+  if (status === 404) {
+    return new GitHubRequestError('User not found', GitHubErrorCode.NOT_FOUND, 404);
+  }
+  if (status === 403) {
+    return new GitHubRequestError(
+      'GitHub API rate limit exceeded',
+      GitHubErrorCode.RATE_LIMIT,
+      403
+    );
+  }
+  if (status >= 500) {
+    return new GitHubRequestError(
+      'GitHub API is temporarily unavailable',
+      GitHubErrorCode.API_DOWN,
+      status
+    );
+  }
+  return new GitHubRequestError(
+    `GitHub API error: ${status}`,
+    GitHubErrorCode.API_ERROR,
+    status
+  );
+}
+
 /* function to get authorization headers once to use it everywhere */
 function getHeaders() {
   const headers = {
@@ -18,16 +60,19 @@ function getHeaders() {
   return headers;
 }
 
+async function assertOk(response) {
+  if (!response.ok) {
+    throw errorFromStatus(response.status);
+  }
+}
+
 /* fetch user profile from GitHub API */
 async function fetchUserProfile(username) {
   const response = await fetch(`${GITHUB_API_BASE}/users/${username}`, {
     headers: getHeaders(),
   });
 
-  if (!response.ok) {
-    throw new Error(`GitHub API error: ${response.status}`);
-  }
-
+  await assertOk(response);
   return response.json();
 }
 
@@ -43,9 +88,7 @@ async function fetchUserRepos(username) {
       { headers: getHeaders() }
     );
 
-    if (!response.ok) {
-      throw new Error(`GitHub API error: ${response.status}`);
-    }
+    await assertOk(response);
 
     const data = await response.json();
     repos.push(...data);
@@ -87,7 +130,7 @@ async function fetchAvatarDataUri(avatarUrl) {
     const buffer = Buffer.from(await response.arrayBuffer());
     const base64 = buffer.toString('base64');
     return `data:${contentType};base64,${base64}`;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -124,7 +167,6 @@ function normalizeUserData(profile, repos, avatarDataUri) {
 
 /* fetch and normalize all gitHub data for a user */
 export async function getGitHubUserData(username) {
-  // checks cache first
   const cached = githubCache.get(username);
   if (cached) {
     return cached;
@@ -141,14 +183,23 @@ export async function getGitHubUserData(username) {
       data: normalizeUserData(profile, repos, avatarDataUri),
     };
 
-    // store in cache
     githubCache.set(username, result);
 
     return result;
   } catch (error) {
+    if (error instanceof GitHubRequestError) {
+      return {
+        success: false,
+        error: error.message,
+        code: error.code,
+        status: error.status,
+      };
+    }
+
     return {
       success: false,
       error: error.message || 'Failed to fetch GitHub data',
+      code: GitHubErrorCode.NETWORK,
     };
   }
 }
