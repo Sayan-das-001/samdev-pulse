@@ -38,7 +38,8 @@ function escapeXml(str) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
 }
 
 /**
@@ -53,7 +54,7 @@ export function renderGracefulError({ code = 'API_ERROR', username, detail }) {
   const cardWidth = width - padding * 2;
   const cardHeight = 168;
   const cardX = padding;
-  const cardY = 52;
+  const cardY = 50;
   const centerX = width / 2;
 
   const usernameLine = username ? `@${escapeXml(username)}` : '';
@@ -73,7 +74,7 @@ export function renderGracefulError({ code = 'API_ERROR', username, detail }) {
     `<text x="${centerX}" y="${cardY + (usernameLine ? 136 : 120)}" font-family="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" fill="${colors.secondaryText}" text-anchor="middle">${escapeXml(copy.message)}</text>`,
     `<text x="${centerX}" y="${cardY + (usernameLine ? 154 : 138)}" font-family="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" fill="${colors.mutedText}" text-anchor="middle">${escapeXml(copy.hint)}</text>`,
     detailLine
-      ? `<text x="${centerX}" y="${cardY + 172}" font-family="monospace" font-size="10" fill="${colors.mutedText}" text-anchor="middle" opacity="0.7">${detailLine}</text>`
+      ? `<text x="${centerX}" y="${cardY + 182}" font-family="monospace" font-size="10" fill="${colors.mutedText}" text-anchor="middle" opacity="0.7">${detailLine}</text>`
       : '',
   ].filter(Boolean).join('\n');
 
