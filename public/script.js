@@ -457,3 +457,137 @@ function setupThemeCardClicks() {
     initHamburger();
   }
 })();
+
+// ── Theme Gallery: Search & Filter + Show More ──
+(function () {
+  function initThemeFilter() {
+    const searchInput   = document.getElementById('themeSearch');
+    const chips         = document.querySelectorAll('.theme-chip');
+    const cards         = document.querySelectorAll('#themesGrid .theme-card');
+    const emptyState    = document.getElementById('themeEmptyState');
+    const countEl       = document.getElementById('themeResultCount');
+    const showMoreBtn   = document.getElementById('themeShowMoreBtn');
+    const showMoreWrap  = document.getElementById('themeShowMoreWrapper');
+
+    if (!searchInput || !emptyState || !countEl) return;
+
+    const totalCount  = cards.length;
+    const INITIAL_SHOW = 8;
+
+    const countAllEl = document.getElementById('count-all');
+    if (countAllEl) countAllEl.textContent = totalCount;
+
+    let activeCategory = 'all';
+    let searchQuery    = '';
+    let showingAll     = false;   // tracks whether user expanded the list
+
+    // ── Core filter function ──
+    function filterThemes() {
+      const isFiltering = searchQuery !== '' || activeCategory !== 'all';
+      let visible = 0;
+      let shownSoFar = 0;
+
+      cards.forEach(card => {
+        const name   = card.querySelector('.theme-name').textContent.toLowerCase();
+        const desc   = card.querySelector('.theme-desc').textContent.toLowerCase();
+        const cat    = card.dataset.cat    || '';
+        const colors = (card.dataset.colors || '').toLowerCase();
+
+        const matchesCat    = activeCategory === 'all' || cat === activeCategory;
+        const matchesSearch = searchQuery === '' ||
+          name.includes(searchQuery)   ||
+          desc.includes(searchQuery)   ||
+          cat.includes(searchQuery)    ||
+          colors.includes(searchQuery);
+
+        const matches = matchesCat && matchesSearch;
+
+        if (matches) {
+          visible++;
+
+          if (isFiltering || showingAll) {
+            // When filtering or expanded: show all matches
+            card.style.display = '';
+          } else {
+            // Default state: show only first INITIAL_SHOW
+            if (shownSoFar < INITIAL_SHOW) {
+              card.style.display = '';
+              shownSoFar++;
+            } else {
+              card.style.display = 'none';
+            }
+          }
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Empty state
+      emptyState.style.display = visible === 0 ? 'block' : 'none';
+
+      // Result count text
+      if (isFiltering) {
+        countEl.textContent = `Showing ${visible} of ${totalCount} themes`;
+      } else if (showingAll) {
+        countEl.textContent = `Showing all ${totalCount} themes`;
+      } else {
+        countEl.textContent = `Showing ${Math.min(INITIAL_SHOW, visible)} of ${totalCount} themes`;
+      }
+
+      // Show/hide the Show More button
+      // Hide it when: filtering is active, or all cards already visible
+      if (isFiltering || visible <= INITIAL_SHOW) {
+        showMoreWrap.style.display = 'none';
+      } else {
+        showMoreWrap.style.display = 'flex';
+        showMoreBtn.textContent = showingAll ? 'Show Less' : `Show All Themes (${visible})`;
+        // re-attach the arrow SVG since we overwrote textContent
+        showMoreBtn.innerHTML = showingAll
+          ? `Show Less <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>`
+          : `Show All Themes (${visible}) <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>`;
+        showMoreBtn.classList.toggle('expanded', showingAll);
+      }
+    }
+
+    // ── Show More button click ──
+    if (showMoreBtn) {
+      showMoreBtn.addEventListener('click', () => {
+        showingAll = !showingAll;
+        filterThemes();
+
+        // If collapsing back to 5, scroll up to themes section
+        if (!showingAll) {
+          document.getElementById('themes')
+            .scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    }
+
+    // ── Search input ──
+    searchInput.addEventListener('input', e => {
+      searchQuery = e.target.value.trim().toLowerCase();
+      showingAll  = false;  // reset expansion on new search
+      filterThemes();
+    });
+
+    // ── Chip clicks ──
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeCategory = chip.dataset.cat;
+        showingAll     = false;  // reset expansion on category change
+        filterThemes();
+      });
+    });
+
+    // Run on load
+    filterThemes();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initThemeFilter);
+  } else {
+    initThemeFilter();
+  }
+})();
