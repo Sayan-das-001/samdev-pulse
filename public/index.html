@@ -211,15 +211,39 @@
   </section>
 
   <!-- Themes Gallery Section -->
-  <section class="themes-section" id="themes">
+     <section class="themes-section" id="themes">
     <div class="container">
       <div class="section-header">
         <h2 class="section-title">Stunning Themes for Every Taste</h2>
         <p class="section-subtitle">Choose from our carefully crafted color schemes or use the default dark theme</p>
       </div>
 
-      <div class="themes-grid">
-        <div class="theme-card" data-theme="" tabindex="0" role="button" aria-label="Select Dark theme">
+      <!-- Theme Search & Filter Controls -->
+      <div class="theme-controls">
+        <div class="theme-search-wrapper">
+          <svg class="theme-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            id="themeSearch"
+            class="theme-search-input"
+            placeholder="Search themes… e.g. pastel, neon, tokyo"
+            autocomplete="off"
+          />
+        </div>
+        <div class="theme-filter-chips">
+          <button class="theme-chip active" data-cat="all">All <span class="chip-count" id="count-all"></span></button>
+          <button class="theme-chip" data-cat="dark"> Dark</button>
+          <button class="theme-chip" data-cat="neon"> Neon</button>
+          <button class="theme-chip" data-cat="pastel"> Pastel</button>
+          <button class="theme-chip" data-cat="minimal"> Minimal</button>
+        </div>
+        <p class="theme-result-count" id="themeResultCount"></p>
+      </div>
+
+      <div class="themes-grid" id="themesGrid">
+        <div class="theme-card" data-theme="" data-cat="minimal" data-colors="black purple white"  tabindex="0" role="button" aria-label="Select Dark theme">
           <div class="theme-preview dark-theme">
             <div class="theme-swatch-group">
               <div class="theme-swatch" style="background: #0d1117;"></div>
@@ -233,7 +257,7 @@
           </div>
         </div>
 
-        <div class="theme-card" data-theme="light" tabindex="0" role="button" aria-label="Select Light theme">
+        <div class="theme-card" data-theme="light" data-cat="minimal" data-colors="black blue white"  tabindex="0" role="button" aria-label="Select Light theme">
           <div class="theme-preview light-theme">
             <div class="theme-swatch-group">
               <div class="theme-swatch" style="background: #ffffff;"></div>
@@ -247,7 +271,7 @@
           </div>
         </div>
 
-        <div class="theme-card" data-theme="dracula" tabindex="0" role="button" aria-label="Select Dracula theme">
+        <div class="theme-card" data-theme="dracula" data-cat="dark" data-colors="black pink green "  tabindex="0" role="button" aria-label="Select Dracula theme">
           <div class="theme-preview dracula-theme">
             <div class="theme-swatch-group">
               <div class="theme-swatch" style="background: #282a36;"></div>
@@ -260,8 +284,72 @@
             <p class="theme-desc">Popular vampiric color scheme</p>
           </div>
         </div>
-
-        <div class="theme-card" data-theme="nord" tabindex="0" role="button" aria-label="Select Nord theme">
+<div class="theme-card" data-theme="midnightneon" data-cat="neon" data-colors="black cyan pink"  tabindex="0" role="button" aria-label="Select Midnight Neon theme">
+  <div class="theme-preview">
+    <div class="theme-swatch-group">
+      <div class="theme-swatch" style="background: #09090f;"></div>
+      <div class="theme-swatch" style="background: #00f5ff;"></div>
+      <div class="theme-swatch" style="background: #ff00ff;"></div>
+    </div>
+  </div>
+  <div class="theme-info">
+    <h4 class="theme-name">Midnight Neon</h4>
+    <p class="theme-desc">Futuristic glowing cyber aesthetics</p>
+  </div>
+</div>
+<div class="theme-card" data-theme="monokai" data-cat="dark" data-colors="pink green lime"  tabindex="0" role="button" aria-label="Select Monokai theme">
+          <div class="theme-preview monokai-theme">
+            <div class="theme-swatch-group">
+              <div class="theme-swatch" style="background: #272822;"></div>
+              <div class="theme-swatch" style="background: #f92672;"></div>
+              <div class="theme-swatch" style="background: #a6e22e;"></div>
+            </div>
+          </div>
+          <div class="theme-info">
+            <h4 class="theme-name">Monokai</h4>
+            <p class="theme-desc">Classic Monokai Pro colors</p>
+          </div>
+        </div>
+        <div class="theme-card" data-theme="catppuccin" data-cat="pastel" data-colors="blue pink white"  tabindex="0" role="button" aria-label="Select Catppuccin theme">
+          <div class="theme-preview catppuccin-theme">
+            <div class="theme-swatch-group">
+              <div class="theme-swatch" style="background: #1e1e2e;"></div>
+              <div class="theme-swatch" style="background: #f38ba8;"></div>
+              <div class="theme-swatch" style="background: #cdd6f4;"></div>
+            </div>
+          </div>
+          <div class="theme-info">
+            <h4 class="theme-name">Catppuccin</h4>
+            <p class="theme-desc">Sweet and soothing pastel scheme</p>
+          </div>
+        </div>
+         <div class="theme-card" data-theme="aurora" data-cat="neon" data-colors="cyan blue white"  tabindex="0" role="button" aria-label="Select Aurora theme">
+          <div class="theme-preview aurora-theme">
+            <div class="theme-swatch-group">
+              <div class="theme-swatch" style="background: #0b1020;"></div>
+              <div class="theme-swatch" style="background: #22d3ee;"></div>
+              <div class="theme-swatch" style="background: #e6f7ff;"></div>
+            </div>
+          </div>
+          <div class="theme-info">
+            <h4 class="theme-name">Aurora</h4>
+            <p class="theme-desc">Cool cyan and emerald lights over deep blue night</p>
+          </div>
+        </div>
+        <div class="theme-card" data-theme="synthwave84" data-cat="neon" data-colors="purple pink cyan"  tabindex="0" role="button" aria-label="Select Synthwave 84 theme">
+  <div class="theme-preview">
+    <div class="theme-swatch-group">
+      <div class="theme-swatch" style="background: #241b2f;"></div>
+      <div class="theme-swatch" style="background: #ff7edb;"></div>
+      <div class="theme-swatch" style="background: #36f9f6;"></div>
+    </div>
+  </div>
+  <div class="theme-info">
+    <h4 class="theme-name">Synthwave 84</h4>
+    <p class="theme-desc">Retro neon cyberpunk aesthetics</p>
+  </div>
+</div>
+        <div class="theme-card" data-theme="nord" data-cat="dark" data-colors="blue grey white"  tabindex="0" role="button" aria-label="Select Nord theme">
           <div class="theme-preview nord-theme">
             <div class="theme-swatch-group">
               <div class="theme-swatch" style="background: #2e3440;"></div>
@@ -275,7 +363,7 @@
           </div>
         </div>
 
-        <div class="theme-card" data-theme="tokyonight" tabindex="0" role="button" aria-label="Select Tokyo Night theme">
+        <div class="theme-card" data-theme="tokyonight" data-cat="dark" data-colors="blue sky"  tabindex="0" role="button" aria-label="Select Tokyo Night theme">
           <div class="theme-preview tokyo-theme">
             <div class="theme-swatch-group">
               <div class="theme-swatch" style="background: #1a1b26;"></div>
@@ -289,21 +377,9 @@
           </div>
         </div>
 
-        <div class="theme-card" data-theme="monokai" tabindex="0" role="button" aria-label="Select Monokai theme">
-          <div class="theme-preview monokai-theme">
-            <div class="theme-swatch-group">
-              <div class="theme-swatch" style="background: #272822;"></div>
-              <div class="theme-swatch" style="background: #f92672;"></div>
-              <div class="theme-swatch" style="background: #a6e22e;"></div>
-            </div>
-          </div>
-          <div class="theme-info">
-            <h4 class="theme-name">Monokai</h4>
-            <p class="theme-desc">Classic Monokai Pro colors</p>
-          </div>
-        </div>
+        
 
-        <div class="theme-card" data-theme="gruvbox" tabindex="0" role="button" aria-label="Select Gruvbox theme">
+        <div class="theme-card" data-theme="gruvbox" data-cat="dark" data-colors=" yellow beige"  tabindex="0" role="button" aria-label="Select Gruvbox theme">
           <div class="theme-preview gruvbox-theme">
             <div class="theme-swatch-group">
               <div class="theme-swatch" style="background: #282828;"></div>
@@ -317,7 +393,7 @@
           </div>
         </div>
 
-        <div class="theme-card" data-theme="solarized" tabindex="0" role="button" aria-label="Select Solarized theme">
+        <div class="theme-card" data-theme="solarized" data-cat="minimal" data-colors="teal white" tabindex="0" role="button" aria-label="Select Solarized theme">
           <div class="theme-preview solarized-theme">
             <div class="theme-swatch-group">
               <div class="theme-swatch" style="background: #002b36;"></div>
@@ -331,21 +407,9 @@
           </div>
         </div>
 
-        <div class="theme-card" data-theme="catppuccin" tabindex="0" role="button" aria-label="Select Catppuccin theme">
-          <div class="theme-preview catppuccin-theme">
-            <div class="theme-swatch-group">
-              <div class="theme-swatch" style="background: #1e1e2e;"></div>
-              <div class="theme-swatch" style="background: #f38ba8;"></div>
-              <div class="theme-swatch" style="background: #cdd6f4;"></div>
-            </div>
-          </div>
-          <div class="theme-info">
-            <h4 class="theme-name">Catppuccin</h4>
-            <p class="theme-desc">Sweet and soothing pastel scheme</p>
-          </div>
-        </div>
+        
 
-        <div class="theme-card" data-theme="rose-pine" tabindex="0" role="button" aria-label="Select Rose Pine theme">
+        <div class="theme-card" data-theme="rose-pine" data-cat="pastel" data-colors=" pink white"  tabindex="0" role="button" aria-label="Select Rose Pine theme">
           <div class="theme-preview rose-pine-theme">
             <div class="theme-swatch-group">
               <div class="theme-swatch" style="background: #191724;"></div>
@@ -359,21 +423,9 @@
           </div>
         </div>
 
-        <div class="theme-card" data-theme="aurora" tabindex="0" role="button" aria-label="Select Aurora theme">
-          <div class="theme-preview aurora-theme">
-            <div class="theme-swatch-group">
-              <div class="theme-swatch" style="background: #0b1020;"></div>
-              <div class="theme-swatch" style="background: #22d3ee;"></div>
-              <div class="theme-swatch" style="background: #e6f7ff;"></div>
-            </div>
-          </div>
-          <div class="theme-info">
-            <h4 class="theme-name">Aurora</h4>
-            <p class="theme-desc">Cool cyan and emerald lights over deep blue night</p>
-          </div>
-        </div>
+       
 
-        <div class="theme-card" data-theme="midnight-sunset" tabindex="0" role="button" aria-label="Select Midnight Sunset theme">
+        <div class="theme-card" data-theme="midnight-sunset" data-cat="dark" data-colors="purple orange white"   tabindex="0" role="button" aria-label="Select Midnight Sunset theme">
           <div class="theme-preview midnight-sunset-theme">
             <div class="theme-swatch-group">
               <div class="theme-swatch" style="background: #1a1024;"></div>
@@ -386,7 +438,7 @@
             <p class="theme-desc">Warm orange-pink sunset glow on dark violet</p>
           </div>
         </div>
-        <div class="theme-card" data-theme="onedarkpro" tabindex="0" role="button" aria-label="Select One Dark Pro theme">
+        <div class="theme-card" data-theme="onedarkpro" data-cat="dark" data-colors="blue grey"  tabindex="0" role="button" aria-label="Select One Dark Pro theme">
   <div class="theme-preview">
     <div class="theme-swatch-group">
       <div class="theme-swatch" style="background: #282c34;"></div>
@@ -399,7 +451,7 @@
     <p class="theme-desc">VS Code inspired modern editor palette</p>
   </div>
 </div>
-<div class="theme-card" data-theme="material" tabindex="0" role="button" aria-label="Select Material theme">
+<div class="theme-card" data-theme="material" data-cat="minimal"  data-colors="grey blue white"  tabindex="0" role="button" aria-label="Select Material theme">
   <div class="theme-preview">
     <div class="theme-swatch-group">
       <div class="theme-swatch" style="background: #263238;"></div>
@@ -412,20 +464,8 @@
     <p class="theme-desc">Material UI inspired soft modern tones</p>
   </div>
 </div>
-<div class="theme-card" data-theme="synthwave84" tabindex="0" role="button" aria-label="Select Synthwave 84 theme">
-  <div class="theme-preview">
-    <div class="theme-swatch-group">
-      <div class="theme-swatch" style="background: #241b2f;"></div>
-      <div class="theme-swatch" style="background: #ff7edb;"></div>
-      <div class="theme-swatch" style="background: #36f9f6;"></div>
-    </div>
-  </div>
-  <div class="theme-info">
-    <h4 class="theme-name">Synthwave 84</h4>
-    <p class="theme-desc">Retro neon cyberpunk aesthetics</p>
-  </div>
-</div>
-<div class="theme-card" data-theme="forestnight" tabindex="0" role="button" aria-label="Select Forest Night theme">
+
+<div class="theme-card" data-theme="forestnight" data-cat="dark" data-colors=" green white"  tabindex="0" role="button" aria-label="Select Forest Night theme">
   <div class="theme-preview">
     <div class="theme-swatch-group">
       <div class="theme-swatch" style="background: #0f1a14;"></div>
@@ -438,7 +478,7 @@
     <p class="theme-desc">Deep green nature-inspired palette</p>
   </div>
 </div>
-<div class="theme-card" data-theme="oceanicnext" tabindex="0" role="button" aria-label="Select Oceanic Next theme">
+<div class="theme-card" data-theme="oceanicnext" data-cat="dark" data-colors="blue cyan white"  tabindex="0" role="button" aria-label="Select Oceanic Next theme">
   <div class="theme-preview">
     <div class="theme-swatch-group">
       <div class="theme-swatch" style="background: #0f111a;"></div>
@@ -451,7 +491,7 @@
     <p class="theme-desc">Cool ocean blues with coding vibes</p>
   </div>
 </div>
-<div class="theme-card" data-theme="emberglow" tabindex="0" role="button" aria-label="Select Ember Glow theme">
+<div class="theme-card" data-theme="emberglow" data-cat="neon" data-colors="red orange "  tabindex="0" role="button" aria-label="Select Ember Glow theme">
   <div class="theme-preview">
     <div class="theme-swatch-group">
       <div class="theme-swatch" style="background: #1a0f0f;"></div>
@@ -464,20 +504,8 @@
     <p class="theme-desc">Warm fiery orange and crimson tones</p>
   </div>
 </div>
-<div class="theme-card" data-theme="midnightneon" tabindex="0" role="button" aria-label="Select Midnight Neon theme">
-  <div class="theme-preview">
-    <div class="theme-swatch-group">
-      <div class="theme-swatch" style="background: #09090f;"></div>
-      <div class="theme-swatch" style="background: #00f5ff;"></div>
-      <div class="theme-swatch" style="background: #ff00ff;"></div>
-    </div>
-  </div>
-  <div class="theme-info">
-    <h4 class="theme-name">Midnight Neon</h4>
-    <p class="theme-desc">Futuristic glowing cyber aesthetics</p>
-  </div>
-</div>
-<div class="theme-card" data-theme="pasteldream" tabindex="0" role="button" aria-label="Select Pastel Dream theme">
+
+<div class="theme-card" data-theme="pasteldream" data-cat="pastel" data-colors="blue pink"  tabindex="0" role="button" aria-label="Select Pastel Dream theme">
   <div class="theme-preview">
     <div class="theme-swatch-group">
       <div class="theme-swatch" style="background: #1f1d2b;"></div>
@@ -490,6 +518,20 @@
     <p class="theme-desc">Soft dreamy pastel gradients and tones</p>
   </div>
 </div>
+ <!-- Show More / Show Less button -->
+        <div class="theme-show-more-wrapper" id="themeShowMoreWrapper">
+          <button class="theme-show-more-btn" id="themeShowMoreBtn">
+            Show All Themes
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+        </div>
+ <!-- Empty state shown when nothing matches -->
+        <div class="theme-empty-state" id="themeEmptyState" style="display:none;">
+          <p>No themes match your search.</p>
+          <small>Try a different keyword or click "All" to reset.</small>
+        </div>
       </div>
     </div>
   </section>
