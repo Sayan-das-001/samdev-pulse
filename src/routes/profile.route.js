@@ -54,7 +54,7 @@ router.get('/', async (req, res) => {
   setTheme(theme || 'dark');
 
   const rawUsername = typeof req.query.username === 'string' ? req.query.username : '';
-  const usernameRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$|^[a-zA-Z0-9]$/;
+  const usernameRegex = /^(?!.*--)[a-zA-Z0-9]([a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$/;
 
   let username;
   if (!rawUsername) {
