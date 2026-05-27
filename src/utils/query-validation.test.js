@@ -25,19 +25,25 @@ test('normalizeTheme and normalizeAlign trim, lowercase, and fall back safely', 
   assert.equal(normalizeAlign('middle'), 'left');
 });
 
-test('normalizeGitHubUsername trims values and preserves invalid username handling', () => {
-  assert.deepEqual(
-    normalizeGitHubUsername(' octocat ', 'SamXop123'),
-    { username: 'octocat', isValid: true }
-  );
-  assert.deepEqual(
-    normalizeGitHubUsername('bad/name', 'SamXop123'),
-    { username: 'bad/name', isValid: false }
-  );
-  assert.deepEqual(
-    normalizeGitHubUsername('', 'SamXop123'),
-    { username: 'SamXop123', isValid: true }
-  );
+test('normalizeGitHubUsername validates usernames correctly (lookahead rules, hyphens, and lengths)', () => {
+  // Valid usernames
+  assert.deepEqual(normalizeGitHubUsername(' octocat ', 'SamXop123'), { username: 'octocat', isValid: true });
+  assert.deepEqual(normalizeGitHubUsername('a-b', 'SamXop123'), { username: 'a-b', isValid: true });
+  assert.deepEqual(normalizeGitHubUsername('abc-def-ghi', 'SamXop123'), { username: 'abc-def-ghi', isValid: true });
+  assert.deepEqual(normalizeGitHubUsername('a', 'SamXop123'), { username: 'a', isValid: true });
+  assert.deepEqual(normalizeGitHubUsername('1', 'SamXop123'), { username: '1', isValid: true });
+  assert.deepEqual(normalizeGitHubUsername('a'.repeat(39), 'SamXop123'), { username: 'a'.repeat(39), isValid: true });
+  
+  // Empty values use fallback default
+  assert.deepEqual(normalizeGitHubUsername('', 'SamXop123'), { username: 'SamXop123', isValid: true });
+
+  // Invalid usernames
+  assert.deepEqual(normalizeGitHubUsername('bad/name', 'SamXop123'), { username: 'bad/name', isValid: false });
+  assert.deepEqual(normalizeGitHubUsername('a--b', 'SamXop123'), { username: 'a--b', isValid: false });
+  assert.deepEqual(normalizeGitHubUsername('a---b', 'SamXop123'), { username: 'a---b', isValid: false });
+  assert.deepEqual(normalizeGitHubUsername('-ab', 'SamXop123'), { username: '-ab', isValid: false });
+  assert.deepEqual(normalizeGitHubUsername('ab-', 'SamXop123'), { username: 'ab-', isValid: false });
+  assert.deepEqual(normalizeGitHubUsername('a'.repeat(40), 'SamXop123'), { username: 'a'.repeat(40), isValid: false });
 });
 
 test('normalizeCPHandle sanitizes handles and treats boolean-like values as disabled', () => {
